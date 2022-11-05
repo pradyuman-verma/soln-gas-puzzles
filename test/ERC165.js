@@ -45,12 +45,25 @@ describe('ERC165Challenge', function () {
         award.transferFrom(owner.address, victim.address, 1337);
     });
 
+    /**
+     * CALLVALUE // This will laod 0 into the stack as msg.value is 0
+     * CALLDATALOAD // This will load the 32 byte calldata starting from offset 0
+     * PUSH1 0xe0 // This will push 224 onto the stack
+     * SHR // Now our stack has 32 byte calldata, and 224. This operation will right shift it by 28 bytes and put it onto the stack
+     * GASPRICE // This will put gas price of tx onto the stack i.e., tx.gasprice
+     * EQ // This will check whether the gasprice or calldata is equal or not and put 0/1 onto the stack
+     * CALLVALUE // Now again load 0 onto the stack
+     * MSTORE // Now we store the result of EQ at location 0
+     * MSIZE    // This will put the current memory size onto the stack
+     * CALLVALUE // This will again put 0 onto the stack
+     * RETURN // Now we will return the memory from offset to offset + size
+     */
     [1, 2, 3, 4, 5, 6, 7].forEach(function (round) {
         it(`Hack Round ${round}`, async function () {
             /* YOUR CODE HERE */
             const bytecode =
-                // '0x600d600d600039600d6000f300343560e01c3a143452602034f3';
-                '0x600d600d600039600d6000f300343560e01c3a1434525934f3';
+                // '0x600d600d600039600d6000f300343560e01c3a1434525934f3'; // .call()
+                '0x600d600d600039600d6000f30060043560e01c3a1434525934f3';
             let tx = {
                 from: attacker.address,
                 data: bytecode,

@@ -42,10 +42,7 @@ contract NFTGiver {
         public
         returns (bool)
     {
-        (bool suc, bytes memory data) = address(target).call{gas: GAS_LIMIT}(
-            abi.encode(_interface)
-        );
-        return abi.decode(data, (bool));
+        return target.supportsInterface(_interface);
     }
 
     function challenge1(ERC165 target) external {
