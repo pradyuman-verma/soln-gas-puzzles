@@ -46,8 +46,8 @@ describe('ERC165Challenge', function () {
     });
 
     /**
-     * CALLVALUE // This will laod 0 into the stack as msg.value is 0
-     * CALLDATALOAD // This will load the 32 byte calldata starting from offset 0
+     * PUSH1 0x04 // This will laod 4 into the stack
+     * CALLDATALOAD // This will load the 32 byte calldata starting from offset 4
      * PUSH1 0xe0 // This will push 224 onto the stack
      * SHR // Now our stack has 32 byte calldata, and 224. This operation will right shift it by 28 bytes and put it onto the stack
      * GASPRICE // This will put gas price of tx onto the stack i.e., tx.gasprice
